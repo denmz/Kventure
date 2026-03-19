@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BTS — Kventure</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold:      #D4A017;
+      --gold-lt:   #F0C940;
+      --rose:      #E8628A;
+      --rose-lt:   #F9A8C9;
+      --purple:    #7B3FA0;
+      --purple-lt: #B47FD4;
+      
+      --cyan:      #9B59B6;
+      --cyan-lt:   #D7A8F0;
+      --white:     #FDF8FF;
+      --dark:      #1A0A2E;
+      --card-bg:   rgba(255,255,255,0.06);
+      --border:    rgba(155,89,182,0.25);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--dark);
+      color: var(--white);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 10% 20%, rgba(123,63,160,0.3) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 90% 80%, rgba(212,160,23,0.2) 0%, transparent 55%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0 2.5rem;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(26,10,46,0.85);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      background: linear-gradient(90deg, var(--gold), var(--rose-lt));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 1.2rem;
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      text-decoration: none;
+      color: rgba(253,248,255,0.7);
+      font-size: 0.88rem;
+      transition: all 0.25s;
+    }
+    .back-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+
+    
+    .grupo-banner {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 5rem 2rem 4rem;
+    }
+
+    .grupo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.4rem 1.4rem;
+      border: 1px solid rgba(155,89,182,0.4);
+      border-radius: 50px;
+      font-size: 0.78rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--cyan-lt);
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .grupo-banner h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 900;
+      animation: fadeUp 0.7s ease 0.1s both;
+      background: linear-gradient(135deg, var(--cyan-lt), var(--purple-lt));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .grupo-banner p {
+      margin-top: 1rem;
+      color: rgba(253,248,255,0.5);
+      font-size: 1rem;
+      animation: fadeUp 0.8s ease 0.2s both;
+    }
+
+    
+    .grupo-line {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--purple-lt));
+      margin: 1.8rem auto 0;
+      border-radius: 10px;
+      animation: fadeUp 0.8s ease 0.3s both;
+    }
+
+    .seccion {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto 4rem;
+      padding: 0 2.5rem;
+    }
+
+    .seccion-titulo {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .seccion-titulo h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--cyan-lt), var(--white));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .linea {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(155,89,182,0.3), transparent);
+    }
+
+    .productos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .producto-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+      animation: fadeUp 0.7s ease both;
+      backdrop-filter: blur(10px);
+    }
+    .producto-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--cyan);
+      box-shadow: 0 14px 35px rgba(155,89,182,0.25);
+    }
+
+    .prod-img {
+      width: 100%;
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .prod-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 40%, rgba(26,10,46,0.85));
+    }
+
+    .prod-lightstick .prod-img { background: linear-gradient(135deg, #1a0a2e, #2a0a3a, #7b3fa033); }
+    .prod-album      .prod-img { background: linear-gradient(135deg, #1a0a2e, #1a0a30, #7b3fa033); }
+    .prod-peluche    .prod-img { background: linear-gradient(135deg, #1a0a2e, #1a0030, #b47fd433); }
+    .prod-ropa       .prod-img { background: linear-gradient(135deg, #1a0a2e, #2a0a3a, #9b59b622); }
+
+    .prod-badge {
+      position: absolute;
+      top: 0.7rem;
+      right: 0.7rem;
+      z-index: 2;
+      padding: 0.2rem 0.6rem;
+      border-radius: 50px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    
+    .badge-new { background: rgba(155,89,182,0.25); color: var(--cyan-lt);  border: 1px solid rgba(155,89,182,0.4); }
+    .badge-hot { background: rgba(232,98,138,0.25); color: var(--rose-lt);  border: 1px solid rgba(232,98,138,0.4); }
+    .badge-ltd { background: rgba(51,5,80,0.8);     color: var(--purple-lt); border: 1px solid rgba(180,127,212,0.4); }
+
+    .prod-body { padding: 1rem 1.1rem 1.2rem; }
+
+    .prod-nombre {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+
+    .prod-desc {
+      font-size: 0.78rem;
+      color: rgba(253,248,255,0.45);
+      margin-bottom: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .prod-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 0.8rem;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .prod-precio {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--cyan-lt);
+    }
+
+    .add-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--cyan);
+      background: rgba(155,89,182,0.1);
+      color: var(--cyan-lt);
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .add-btn:hover { background: var(--cyan); color: var(--dark); }
+
+    .back-row {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 1rem 2rem 3rem;
+    }
+    .back-link {
+      color: rgba(253,248,255,0.4);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--cyan); }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      color: rgba(253,248,255,0.25);
+      font-size: 0.8rem;
+    }
+    footer span { color: var(--rose); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .producto-card:nth-child(1) { animation-delay: 0.08s; }
+    .producto-card:nth-child(2) { animation-delay: 0.16s; }
+    .producto-card:nth-child(3) { animation-delay: 0.24s; }
+    .producto-card:nth-child(4) { animation-delay: 0.32s; }
+
+    @media (max-width: 640px) {
+      .grupo-hero { flex-direction: column; text-align: center; padding: 2.5rem 1.2rem 2rem; }
+      .seccion { padding-left: 1.2rem; padding-right: 1.2rem; }
+      .productos-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body data-grupo="bts">
+
+  <header>
+    <div class="logo">Kventure</div>
+    <a href="HYBE.html" class="back-btn">← Volver a HYBE</a>
+      <a href="carrito.html" style="position:relative;font-size:1.4rem;text-decoration:none;margin-left:1rem;cursor:pointer;">🛒<span class="carrito-contador" style="position:absolute;top:-8px;right:-10px;background:#E8628A;color:white;border-radius:50%;width:20px;height:20px;font-size:0.7rem;font-weight:700;display:none;align-items:center;justify-content:center;font-family:sans-serif;">0</span></a>
+</header>
+
+  
+  <div class="grupo-banner">
+    <div class="grupo-badge">BTS · Paved The Way · Leaders</div>
+    
+    <h1>BTS</h1>
+    
+    <p>Debut 13/06/2013 · 7 miembros · HYBE</p>
+    
+    <div class="grupo-line"></div>
+  </div>
+
+  
+  
+  <section class="seccion">
+    <div class="seccion-titulo">
+      <h2>Lightsticks</h2>
+      <div class="linea"></div>
+    </div>
+    <div class="productos-grid">
+
+      <div class="producto-card prod-lightstick">
+        <div class="prod-img">
+          <span class="prod-badge badge-new">NEW</span>
+        </div>
+        <div class="prod-body">
+          <div class="prod-nombre">Lightstick Oficial Ver.3</div>
+          <div class="prod-desc">El icónico lightstick de BTS versión 3.</div>
+          <div class="prod-footer">
+            <div class="prod-precio">$75.00</div>
+            <button class="add-btn">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="producto-card prod-lightstick">
+        <div class="prod-img">
+          <span class="prod-badge badge-ltd">LIMITED</span>
+        </div>
+        <div class="prod-body">
+          <div class="prod-nombre">Lightstick MOTS Ver.</div>
+          <div class="prod-desc">Edición especial Map of the Soul Tour.</div>
+          <div class="prod-footer">
+            <div class="prod-precio">$85.00</div>
+            <button class="add-btn">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="producto-card prod-lightstick">
+        <div class="prod-img"></div>
+        <div class="prod-body">
+          <div class="prod-nombre">Lightstick Oficial Ver.4</div>
+          <div class="prod-desc">El icónico lightstick de BTS versión 4.</div>
+          <div class="prod-footer">
+            <div class="prod-precio">$65.00</div>
+            <button class="add-btn">+</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  
+  <section class="seccion">
+    <div class="seccion-titulo">
+      <h2>Discografía</h2>
+      <div class="linea"></div>
+    </div>
+    <div class="productos-grid">
+
+      <div class="producto-card prod-album">
+        <div class="prod-img"><span class="prod-badge badge-new">NEW</span></div>
+        <div class="prod-body">
+          <div class="prod-nombre">ARIRANG (2026)</div>
+          <div class="prod-desc">El reciente álbum de estudio de BTS, lanzado en 2026 como comeback.</div>
+          <div class="prod-footer">
+            <div class="prod-precio">$22.00</div>
+            <button class="add-btn">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="producto-card prod-album">
+        <div class="prod-img"></div>
+        <div class="prod-body">
+          <div class="prod-nombre">2 Cool 4 Skool (2013)</div>
+          <div class="prod-desc">El primer mini álbum de BTS, lanzado en 2013.</div>
+          <div class="prod-footer">
+            <div class="prod-precio">$22.00</div>
+            <button class="add-btn">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="producto-card prod-album">
+        <div class="prod-img"></div>
+        <div class="prod-body">
+          <div class="prod-nombre">O!RUL8,2? (2013)</div>
+          <div class="prod-desc">El segundo mini álbum de BTS, lanzado en 2013.</div>
+          <div class="prod-footer">
+            <div class="prod-precio">$22.00</div>
+            <button class="add-btn">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="producto-card prod-album">
+        <div class="prod-img"></div>
+        <div class="prod-body">
+          <div class="prod-nombre">The Most Beautiful Moment Pt.1 (2015)</div>
+          <div class="prod-desc">Quinto mini álbum de BTS — I Need U, Dope.</div>
+          <div class="prod-footer">
+            <div class="prod-precio">$22.00</div>
+            <button class="add-btn">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="producto-card prod-album">
+        <div class="prod-img"></div>
+        <div class="prod-body">
+          <div class="prod-nombre">The Most Beautiful Moment Pt.2 (2015)</div>
+          <div class="prod-desc">Sexto mini álbum de BTS — Run, Butterfly.</div>
+          <div class="prod-footer">
+            <div class="prod-precio">$22.00</div>
+            <button class="add-btn">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="producto-card prod-album">
+        <div class="prod-img"></div>
+        <div class="prod-body">
+          <div class="prod-nombre">LOVE YOURSELF: Her (2017)</div>
+          <div class="prod-desc">5to mini álbum — DNA, Best Of Me.</div>
+          <div class="prod-footer">
+            <div class="prod-precio">$22.00</div>
+            <button class="add-btn">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="producto-card prod-album">
+        <div class="prod-img"></div>
+        <div class="prod-body">
+          <div class="prod-nombre">LOVE YOURSELF: Tear (2018)</div>
+          <div class="prod-desc">3er álbum completo — Fake Love, The Truth Untold.</div>
+          <div class="prod-footer">
+            <div class="prod-precio">$22.00</div>
+            <button class="add-btn">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="producto-card prod-album">
+        <div class="prod-img"></div>
+        <div class="prod-body">
+          <div class="prod-nombre">LOVE YOURSELF: Answer (2018)</div>
+          <div class="prod-desc">Repackage — Idol, Epiphany.</div>
+          <div class="prod-footer">
+            <div class="prod-precio">$22.00</div>
+            <button class="add-btn">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="producto-card prod-album">
+        <div class="prod-img"></div>
+        <div class="prod-body">
+          <div class="prod-nombre">MAP OF THE SOUL: 7 (2020)</div>
+          <div class="prod-desc">4to álbum completo — Black Swan, ON, Filter.</div>
+          <div class="prod-footer">
+            <div class="prod-precio">$22.00</div>
+            <button class="add-btn">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="producto-card prod-album">
+        <div class="prod-img"></div>
+        <div class="prod-body">
+          <div class="prod-nombre">BE (2020)</div>
+          <div class="prod-desc">5to álbum completo — Dynamite, Life Goes On.</div>
+          <div class="prod-footer">
+            <div class="prod-precio">$22.00</div>
+            <button class="add-btn">+</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  
+  
+  <section class="seccion">
+    <div class="seccion-titulo">
+      <h2>Peluches BT21</h2>
+      <div class="linea"></div>
+    </div>
+    <div class="productos-grid">
+
+      <div class="producto-card prod-peluche">
+        <div class="prod-img"><span class="prod-badge badge-new">NEW</span></div>
+        <div class="prod-body">
+          <div class="prod-nombre">Peluche RJ (Jin)</div>
+          <div class="prod-desc">El peluche oficial de RJ, personaje de Jin.</div>
+          <div class="prod-footer">
+            <div class="prod-precio">$35.00</div>
+            <button class="add-btn">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="producto-card prod-peluche">
+        <div class="prod-img"></div>
+        <div class="prod-body">
+          <div class="prod-nombre">Peluche Shooky (Suga)</div>
+          <div class="prod-desc">El peluche oficial de Shooky, personaje de Suga.</div>
+          <div class="prod-footer">
+            <div class="prod-precio">$35.00</div>
+            <button class="add-btn">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="producto-card prod-peluche">
+        <div class="prod-img"></div>
+        <div class="prod-body">
+          <div class="prod-nombre">Peluche Mang (J-Hope)</div>
+          <div class="prod-desc">El peluche oficial de Mang, personaje de J-Hope.</div>
+          <div class="prod-footer">
+            <div class="prod-precio">$35.00</div>
+            <button class="add-btn">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="producto-card prod-peluche">
+        <div class="prod-img"></div>
+        <div class="prod-body">
+          <div class="prod-nombre">Peluche Koya (RM)</div>
+          <div class="prod-desc">El peluche oficial de Koya, personaje de RM.</div>
+          <div class="prod-footer">
+            <div class="prod-precio">$35.00</div>
+            <button class="add-btn">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="producto-card prod-peluche">
+        <div class="prod-img"></div>
+        <div class="prod-body">
+          <div class="prod-nombre">Peluche Tata (V)</div>
+          <div class="prod-desc">El peluche oficial de Tata, personaje de V.</div>
+          <div class="prod-footer">
+            <div class="prod-precio">$35.00</div>
+            <button class="add-btn">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="producto-card prod-peluche">
+        <div class="prod-img"></div>
+        <div class="prod-body">
+          <div class="prod-nombre">Peluche Chimmy (Jimin)</div>
+          <div class="prod-desc">El peluche oficial de Chimmy, personaje de Jimin.</div>
+          <div class="prod-footer">
+            <div class="prod-precio">$35.00</div>
+            <button class="add-btn">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="producto-card prod-peluche">
+        <div class="prod-img"><span class="prod-badge badge-hot">HOT</span></div>
+        <div class="prod-body">
+          <div class="prod-nombre">Peluche Cooky (Jungkook)</div>
+          <div class="prod-desc">El peluche oficial de Cooky, personaje de Jungkook.</div>
+          <div class="prod-footer">
+            <div class="prod-precio">$35.00</div>
+            <button class="add-btn">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="producto-card prod-peluche">
+        <div class="prod-img"></div>
+        <div class="prod-body">
+          <div class="prod-nombre">Peluche Van (ARMY)</div>
+          <div class="prod-desc">El peluche oficial de Van, personaje representativo del ARMY.</div>
+          <div class="prod-footer">
+            <div class="prod-precio">$35.00</div>
+            <button class="add-btn">+</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  
+  <section class="seccion">
+    <div class="seccion-titulo">
+      <h2>Ropa y Accesorios</h2>
+      <div class="linea"></div>
+    </div>
+    <div class="productos-grid">
+
+      <div class="producto-card prod-ropa">
+        <div class="prod-img"><span class="prod-badge badge-hot">HOT</span></div>
+        <div class="prod-body">
+          <div class="prod-nombre">Sudadera BTS Logo</div>
+          <div class="prod-desc">Sudadera con capucha con el icónico logo de BTS, tallas S–XL.</div>
+          <div class="prod-footer">
+            <div class="prod-precio">$55.00</div>
+            <button class="add-btn">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="producto-card prod-ropa">
+        <div class="prod-img"></div>
+        <div class="prod-body">
+          <div class="prod-nombre">Camiseta ARMY</div>
+          <div class="prod-desc">Camiseta negra con logo ARMY, unisex.</div>
+          <div class="prod-footer">
+            <div class="prod-precio">$38.00</div>
+            <button class="add-btn">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="producto-card prod-ropa">
+        <div class="prod-img"></div>
+        <div class="prod-body">
+          <div class="prod-nombre">Cap BTS Oficial</div>
+          <div class="prod-desc">Gorra negra ajustable con bordado BTS.</div>
+          <div class="prod-footer">
+            <div class="prod-precio">$30.00</div>
+            <button class="add-btn">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="producto-card prod-ropa">
+        <div class="prod-img"></div>
+        <div class="prod-body">
+          <div class="prod-nombre">Tote Bag ARMY</div>
+          <div class="prod-desc">Bolsa de tela oficial, edición especial.</div>
+          <div class="prod-footer">
+            <div class="prod-precio">$25.00</div>
+            <button class="add-btn">+</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="back-row">
+    <a href="HYBE.html" class="back-link">← Volver a HYBE</a>
+  </div>
+
+  <footer>
+    <p>© 2025 <span>Kventure</span> — Tu universo K-pop favorito ✦</p>
+  </footer>
+
+
+  <script src="js/database.js"></script>
+  <script src="js/carrito.js"></script>
+  <script src="js/grupo.js"></script>
+</body>
+</html>

@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kventure – Mi Cuenta</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --gold:      #D4A017;
+      --gold-lt:   #F0C940;
+      --rose:      #E8628A;
+      --rose-lt:   #F9A8C9;
+      --purple:    #7B3FA0;
+      --purple-lt: #B47FD4;
+      --white:     #FDF8FF;
+      --dark:      #1A0A2E;
+      --card-bg:   rgba(255,255,255,0.06);
+      --border:    rgba(212,160,23,0.25);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--dark);
+      color: var(--white);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 10% 20%, rgba(123,63,160,0.35) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 90% 80%, rgba(232,98,138,0.25) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(212,160,23,0.10) 0%, transparent 60%);
+      z-index: 0; pointer-events: none;
+    }
+
+    .orb { position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.18; z-index: 0; animation: drift 12s ease-in-out infinite alternate; pointer-events: none; }
+    .orb1 { width: 400px; height: 400px; background: var(--purple); top: -100px; left: -100px; animation-duration: 14s; }
+    .orb2 { width: 300px; height: 300px; background: var(--rose); bottom: -80px; right: -60px; animation-duration: 10s; }
+    .orb3 { width: 250px; height: 250px; background: var(--gold); top: 50%; left: 60%; animation-duration: 16s; }
+
+    @keyframes drift {
+      from { transform: translate(0,0) scale(1); }
+      to   { transform: translate(30px,20px) scale(1.08); }
+    }
+
+    
+    header {
+      position: sticky; top: 0; z-index: 100;
+      padding: 0 2.5rem; height: 70px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(26,10,46,0.75);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem; font-weight: 900; letter-spacing: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--rose-lt), var(--purple-lt));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .nav-header { display: flex; gap: 1.2rem; align-items: center; }
+
+    
+    .avatar-header {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 50px; padding: 6px 16px 6px 6px;
+    }
+    .avatar-circulo {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--rose));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif; font-weight: 700;
+      color: var(--dark); font-size: 15px;
+    }
+    .avatar-nombre { font-size: 13px; font-weight: 500; }
+
+    .boton-salir {
+      background: transparent; border: 1px solid var(--border);
+      color: rgba(253,248,255,0.55); padding: 7px 16px; border-radius: 50px;
+      font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .boton-salir:hover { border-color: var(--rose); color: var(--rose-lt); }
+
+    
+    .pagina {
+      position: relative; z-index: 1;
+      display: flex; flex: 1;
+      max-width: 1100px; margin: 0 auto;
+      width: 100%; padding: 0 2rem;
+    }
+
+    
+    aside {
+      width: 220px; flex-shrink: 0;
+      padding: 2.5rem 0;
+      position: sticky; top: 70px;
+      height: calc(100vh - 70px);
+      display: flex; flex-direction: column; gap: 4px;
+    }
+
+    .menu-label {
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 2px;
+      text-transform: uppercase; color: rgba(253,248,255,0.3);
+      padding: 0 12px; margin: 16px 0 6px;
+    }
+    .menu-label:first-child { margin-top: 0; }
+
+    .menu-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px; border-radius: 12px;
+      font-size: 14px; color: rgba(253,248,255,0.55);
+      cursor: pointer; border: none; background: transparent;
+      width: 100%; text-align: left; font-family: 'DM Sans', sans-serif;
+      transition: background 0.2s, color 0.2s;
+    }
+    .menu-item:hover { background: rgba(255,255,255,0.05); color: var(--white); }
+    .menu-item.activo {
+      background: rgba(212,160,23,0.12);
+      color: var(--gold-lt);
+      border: 1px solid rgba(212,160,23,0.2);
+    }
+    .menu-item.peligro:hover { background: rgba(232,98,138,0.1); color: var(--rose-lt); }
+
+    
+    main { flex: 1; padding: 2.5rem 0 4rem 2.5rem; display: flex; flex-direction: column; gap: 1.8rem; }
+
+    .seccion { display: none; flex-direction: column; gap: 1.5rem; animation: fadeUp 0.4s ease both; }
+    .seccion.activa { display: flex; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    
+    .sec-titulo h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem; font-weight: 900; letter-spacing: -0.5px;
+    }
+    .sec-titulo h2 .grad {
+      background: linear-gradient(135deg, var(--gold-lt) 0%, var(--rose) 50%, var(--purple-lt) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .sec-titulo p { color: rgba(253,248,255,0.45); font-size: 14px; margin-top: 4px; }
+
+    
+    .card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 20px; overflow: hidden;
+      backdrop-filter: blur(12px); position: relative;
+    }
+    .card::before {
+      content: '';
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 50%; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .card-cabecera {
+      padding: 18px 24px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .card-titulo { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1rem; color: var(--gold-lt); }
+    .card-cuerpo { padding: 24px; }
+
+    
+    .perfil-hero {
+      display: flex; align-items: center; gap: 20px;
+      padding: 28px 24px;
+    }
+    .avatar-grande {
+      width: 72px; height: 72px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--gold), var(--rose), var(--purple));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif; font-weight: 900;
+      font-size: 28px; color: var(--dark);
+    }
+    .perfil-datos h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; }
+    .perfil-datos .correo { color: rgba(253,248,255,0.45); font-size: 13px; margin-top: 3px; }
+    .badge-activo {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(212,160,23,0.12); border: 1px solid rgba(212,160,23,0.3);
+      color: var(--gold-lt); font-size: 11px; font-weight: 600;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 3px 12px; border-radius: 50px; margin-top: 8px;
+    }
+    .badge-activo::before { content:''; width:5px; height:5px; border-radius:50%; background:var(--gold); animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); }
+    .info-celda { background: rgba(26,10,46,0.6); padding: 18px 24px; }
+    .info-etiqueta { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(253,248,255,0.3); margin-bottom: 6px; }
+    .info-valor { font-size: 15px; }
+
+    
+    .plan-card {
+      background: linear-gradient(135deg, rgba(212,160,23,0.08) 0%, rgba(232,98,138,0.06) 100%);
+      border: 1px solid rgba(212,160,23,0.3); border-radius: 20px; padding: 28px;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    }
+    .plan-nombre { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.3rem; }
+    .plan-detalle { color: rgba(253,248,255,0.45); font-size: 13px; margin-top: 5px; }
+    .plan-precio {
+      font-family: 'Playfair Display', serif; font-size: 2.2rem;
+      font-weight: 900; color: var(--gold-lt); white-space: nowrap;
+    }
+    .plan-precio span { font-size: 0.85rem; color: rgba(253,248,255,0.4); font-family: 'DM Sans', sans-serif; font-weight: 400; }
+
+    
+    .tabla-pagos { width: 100%; border-collapse: collapse; }
+    .tabla-pagos th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(253,248,255,0.3); padding: 0 24px 14px; font-weight: 600; }
+    .tabla-pagos td { padding: 14px 24px; font-size: 14px; border-top: 1px solid var(--border); }
+    .tabla-pagos tr:hover td { background: rgba(255,255,255,0.02); }
+
+    .estado {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 12px; border-radius: 50px;
+      font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+    }
+    .estado::before { content:''; width:5px; height:5px; border-radius:50%; background:currentColor; }
+    .estado.pagado { background: rgba(212,160,23,0.12); color: var(--gold-lt); border: 1px solid rgba(212,160,23,0.25); }
+    .estado.fallido { background: rgba(232,98,138,0.12); color: var(--rose-lt); border: 1px solid rgba(232,98,138,0.25); }
+
+    
+    .boton {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 10px 20px; border-radius: 50px;
+      font-family: 'Playfair Display', serif; font-weight: 700; font-size: 13px;
+      cursor: pointer; border: none; transition: transform 0.2s, box-shadow 0.2s;
+      letter-spacing: 0.5px; text-decoration: none;
+    }
+    .boton:hover { transform: translateY(-2px); }
+    .boton.dorado { background: linear-gradient(135deg, var(--gold), var(--rose)); color: var(--dark); }
+    .boton.dorado:hover { box-shadow: 0 6px 20px rgba(232,98,138,0.35); }
+    .boton.borde { background: transparent; border: 1px solid var(--border); color: rgba(253,248,255,0.7); }
+    .boton.borde:hover { border-color: var(--gold); color: var(--gold-lt); }
+    .boton.peligro { background: transparent; border: 1px solid rgba(232,98,138,0.35); color: var(--rose-lt); }
+    .boton.peligro:hover { background: rgba(232,98,138,0.1); }
+    .boton.chico { padding: 6px 14px; font-size: 12px; }
+
+    
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .campo { display: flex; flex-direction: column; gap: 7px; }
+    .campo.completo { grid-column: 1 / -1; }
+    .campo label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(253,248,255,0.35); }
+    .campo input {
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px 16px;
+      color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 14px;
+      outline: none; transition: border-color 0.25s, box-shadow 0.25s; width: 100%;
+    }
+    .campo input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212,160,23,0.1); }
+    .campo input::placeholder { color: rgba(253,248,255,0.2); }
+    .acciones-form { display: flex; align-items: center; gap: 14px; margin-top: 20px; }
+    .msg-ok { font-size: 13px; color: var(--gold-lt); opacity: 0; transition: opacity 0.3s; }
+    .msg-ok.visible { opacity: 1; }
+
+    
+    .zona-peligro { border: 1px solid rgba(232,98,138,0.25); border-radius: 20px; overflow: hidden; }
+    .zona-peligro .card-cabecera { border-bottom-color: rgba(232,98,138,0.15); }
+    .zona-peligro .card-titulo { color: var(--rose-lt); }
+    .fila-peligro {
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+      padding: 20px 24px; border-top: 1px solid rgba(232,98,138,0.1);
+    }
+    .fila-peligro:first-child { border-top: none; }
+    .fila-peligro h4 { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+    .fila-peligro p { font-size: 13px; color: rgba(253,248,255,0.4); }
+
+    
+    .modal-fondo {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(26,10,46,0.75); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    }
+    .modal-fondo.abierto { opacity: 1; pointer-events: all; }
+    .modal {
+      background: #1e0d3a; border: 1px solid rgba(232,98,138,0.3);
+      border-radius: 20px; padding: 36px; width: 100%; max-width: 420px;
+      transform: translateY(20px); transition: transform 0.25s;
+    }
+    .modal-fondo.abierto .modal { transform: translateY(0); }
+    .modal h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--rose-lt); margin-bottom: 12px; }
+    .modal p { font-size: 14px; color: rgba(253,248,255,0.5); line-height: 1.65; margin-bottom: 24px; }
+    .modal-acciones { display: flex; gap: 12px; justify-content: flex-end; }
+
+    
+    footer {
+      position: relative; z-index: 1;
+      text-align: center; padding: 1.5rem;
+      border-top: 1px solid var(--border);
+      color: rgba(253,248,255,0.3); font-size: 0.82rem; letter-spacing: 0.5px;
+    }
+    footer span { color: var(--rose); }
+
+    @media (max-width: 768px) {
+      header { padding: 0 1.2rem; }
+      .pagina { flex-direction: column; padding: 0 1rem; }
+      aside { width: 100%; height: auto; position: static; padding: 1rem 0 0; flex-direction: row; flex-wrap: wrap; }
+      .menu-label { display: none; }
+      main { padding: 1.5rem 0 3rem; }
+      .info-grid, .form-grid { grid-template-columns: 1fr; }
+      .plan-card { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+
+  
+  <header>
+    <div class="logo">Kventure</div>
+    <div class="nav-header">
+      <div class="avatar-header">
+        <div class="avatar-circulo" id="avatarLetra">U</div>
+        <span class="avatar-nombre" id="avatarNombre">Usuario</span>
+      </div>
+      <button class="boton-salir" onclick="cerrarSesion()">Salir ✦</button>
+    </div>
+      <a href="carrito.html" style="position:relative;font-size:1.4rem;text-decoration:none;margin-left:1rem;cursor:pointer;">🛒<span class="carrito-contador" style="position:absolute;top:-8px;right:-10px;background:#E8628A;color:white;border-radius:50%;width:20px;height:20px;font-size:0.7rem;font-weight:700;display:none;align-items:center;justify-content:center;font-family:sans-serif;">0</span></a>
+</header>
+
+  <div class="pagina">
+
+    
+    <aside>
+      <div class="menu-label">Mi cuenta</div>
+      <button class="menu-item activo" onclick="mostrar('perfil', this)">✦ Información personal</button>
+      <button class="menu-item" onclick="mostrar('pagos', this)">✦ Pagos y suscripción</button>
+
+      <div class="menu-label">Configuración</div>
+      <button class="menu-item" onclick="mostrar('editar', this)">✦ Editar información</button>
+      <button class="menu-item peligro" onclick="mostrar('cuenta', this)">✦ Cerrar cuenta</button>
+    </aside>
+
+    
+    <main>
+
+      
+      <section id="sec-perfil" class="seccion activa">
+        <div class="sec-titulo">
+          <h2>Información <span class="grad">personal</span></h2>
+          <p>Tu perfil y estado de la cuenta</p>
+        </div>
+
+        <div class="card">
+          <div class="perfil-hero">
+            <div class="avatar-grande" id="perfilLetra">U</div>
+            <div class="perfil-datos">
+              <h3 id="perfilNombre">—</h3>
+              <div class="correo" id="perfilCorreo">—</div>
+              <div class="badge-activo">Cuenta activa</div>
+            </div>
+          </div>
+          <div class="info-grid">
+            <div class="info-celda">
+              <div class="info-etiqueta">Nombre completo</div>
+              <div class="info-valor" id="iNombre">—</div>
+            </div>
+            <div class="info-celda">
+              <div class="info-etiqueta">Correo electrónico</div>
+              <div class="info-valor" id="iCorreo">—</div>
+            </div>
+            <div class="info-celda">
+              <div class="info-etiqueta">Teléfono</div>
+              <div class="info-valor" id="iTel">No registrado</div>
+            </div>
+            <div class="info-celda">
+              <div class="info-etiqueta">Miembro desde</div>
+              <div class="info-valor" id="iDesde">—</div>
+            </div>
+            <div class="info-celda">
+              <div class="info-etiqueta">Último acceso</div>
+              <div class="info-valor" id="iAcceso">—</div>
+            </div>
+            <div class="info-celda">
+              <div class="info-etiqueta">Plan activo</div>
+              <div class="info-valor" style="color:var(--gold-lt)">Pro Mensual ✦</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      
+      <section id="sec-pagos" class="seccion">
+        <div class="sec-titulo">
+          <h2>Pagos y <span class="grad">suscripción</span></h2>
+          <p>Administra tu plan y revisa tu historial</p>
+        </div>
+
+        <div class="plan-card">
+          <div>
+            <div class="plan-nombre">Plan Pro Mensual ✦</div>
+            <div class="plan-detalle">Próxima facturación: <strong>15 de abril, 2026</strong></div>
+            <div class="plan-detalle" style="margin-top:4px">Tarjeta terminada en •••• 4821</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:12px">
+            <div class="plan-precio">$9.99 <span>/ mes</span></div>
+            <div style="display:flex;gap:10px">
+              <button class="boton borde chico" onclick="alert('Actualiza tu tarjeta')">Cambiar tarjeta</button>
+              <button class="boton dorado chico">Mejorar plan →</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-cabecera">
+            <span class="card-titulo">Historial de pagos</span>
+            <button class="boton borde chico" onclick="alert('Se enviará el resumen a tu correo')">Descargar todos</button>
+          </div>
+          <table class="tabla-pagos">
+            <thead><tr>
+              <th>Concepto</th><th>Fecha</th><th>Monto</th><th>Estado</th><th></th>
+            </tr></thead>
+            <tbody>
+              <tr><td>Plan Pro Mensual</td><td>15 mar 2026</td><td>$9.99</td><td><span class="estado pagado">Pagado</span></td><td><button class="boton borde chico" onclick="alert('Recibo descargado')">Ver recibo</button></td></tr>
+              <tr><td>Plan Pro Mensual</td><td>15 feb 2026</td><td>$9.99</td><td><span class="estado pagado">Pagado</span></td><td><button class="boton borde chico" onclick="alert('Recibo descargado')">Ver recibo</button></td></tr>
+              <tr><td>Plan Pro Mensual</td><td>15 ene 2026</td><td>$9.99</td><td><span class="estado pagado">Pagado</span></td><td><button class="boton borde chico" onclick="alert('Recibo descargado')">Ver recibo</button></td></tr>
+              <tr><td>Plan Pro Mensual</td><td>15 dic 2025</td><td>$9.99</td><td><span class="estado fallido">Fallido</span></td><td><button class="boton borde chico" onclick="alert('Reintentando...')">Reintentar</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      
+      <section id="sec-editar" class="seccion">
+        <div class="sec-titulo">
+          <h2>Editar <span class="grad">información</span></h2>
+          <p>Actualiza tus datos y contraseña</p>
+        </div>
+
+        <div class="card">
+          <div class="card-cabecera"><span class="card-titulo">Datos personales</span></div>
+          <div class="card-cuerpo">
+            <div class="form-grid">
+              <div class="campo">
+                <label>Nombre</label>
+                <input type="text" id="eNombre" placeholder="Tu nombre"/>
+              </div>
+              <div class="campo">
+                <label>Apellido</label>
+                <input type="text" id="eApellido" placeholder="Tu apellido"/>
+              </div>
+              <div class="campo completo">
+                <label>Correo electrónico</label>
+                <input type="email" id="eCorreo" placeholder="tu@correo.com"/>
+              </div>
+              <div class="campo completo">
+                <label>Teléfono</label>
+                <input type="tel" id="eTel" placeholder="+506 8888 8888"/>
+              </div>
+            </div>
+            <div class="acciones-form">
+              <button class="boton dorado" onclick="guardarDatos()">Guardar cambios ✦</button>
+              <span class="msg-ok" id="okDatos">✓ Guardado correctamente</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-cabecera"><span class="card-titulo">Cambiar contraseña</span></div>
+          <div class="card-cuerpo">
+            <div class="form-grid">
+              <div class="campo completo">
+                <label>Contraseña actual</label>
+                <input type="password" id="pActual" placeholder="••••••••"/>
+              </div>
+              <div class="campo">
+                <label>Nueva contraseña</label>
+                <input type="password" id="pNueva" placeholder="••••••••"/>
+              </div>
+              <div class="campo">
+                <label>Confirmar nueva</label>
+                <input type="password" id="pConfirm" placeholder="••••••••"/>
+              </div>
+            </div>
+            <div class="acciones-form">
+              <button class="boton dorado" onclick="cambiarPass()">Actualizar contraseña ✦</button>
+              <span class="msg-ok" id="okPass">✓ Contraseña actualizada</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      
+      <section id="sec-cuenta" class="seccion">
+        <div class="sec-titulo">
+          <h2>Cerrar <span class="grad">cuenta</span></h2>
+          <p>Acciones permanentes sobre tu cuenta</p>
+        </div>
+
+        <div class="zona-peligro">
+          <div class="card-cabecera">
+            <span class="card-titulo">⚠ Zona de peligro</span>
+          </div>
+          <div class="fila-peligro">
+            <div>
+              <h4>Pausar suscripción</h4>
+              <p>Conservas acceso hasta el fin del período facturado.</p>
+            </div>
+            <button class="boton borde chico" onclick="alert('Suscripción pausada.')">Pausar plan</button>
+          </div>
+          <div class="fila-peligro">
+            <div>
+              <h4>Exportar mis datos</h4>
+              <p>Recibirás un enlace de descarga en tu correo.</p>
+            </div>
+            <button class="boton borde chico" onclick="alert('Enlace enviado a tu correo.')">Exportar datos</button>
+          </div>
+          <div class="fila-peligro">
+            <div>
+              <h4>Eliminar cuenta permanentemente</h4>
+              <p>Acción <strong style="color:var(--rose-lt)">irreversible</strong>. Se borrará todo: datos, historial y suscripción.</p>
+            </div>
+            <button class="boton peligro chico" onclick="abrirModal()">Eliminar cuenta</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  
+  <div class="modal-fondo" id="modalFondo" onclick="cerrarModalFuera(event)">
+    <div class="modal">
+      <h3>¿Eliminar tu cuenta?</h3>
+      <p>Esta acción es permanente e irreversible. Se eliminarán todos tus datos, suscripción e historial de pagos. No podrás recuperarla.</p>
+      <div class="modal-acciones">
+        <button class="boton borde" onclick="cerrarModal()">Cancelar</button>
+        <button class="boton peligro" onclick="eliminarCuenta()">Sí, eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 <span>Kventure</span> — Tu universo K-pop favorito ✦</p>
+  </footer>
+
+  
+  <script src="js/inicio.js"></script>
+
+
+  <script src="js/database.js"></script>
+  <script src="js/carrito.js"></script>
+  <script src="js/inicio.js"></script>
+</body>
+</html>

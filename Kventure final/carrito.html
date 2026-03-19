@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Carrito — Kventure</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    
+    /* ==============================================================
+       VARIABLES DE COLOR
+       Defino mis colores una sola vez aquí usando variables CSS.
+       Para usarlos en cualquier parte escribo: var(--nombre)
+       Si quiero cambiar un color de toda la página, solo lo cambio aquí.
+    ============================================================== */
+    :root {
+      --gold: #D4A017; --gold-lt: #F0C940;
+      --rose: #E8628A; --rose-lt: #F9A8C9;
+      --purple: #7B3FA0; --purple-lt: #B47FD4;
+      --white: #FDF8FF; --dark: #1A0A2E;
+      --card-bg: rgba(255,255,255,0.06);
+      --border: rgba(212,160,23,0.25);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(--white); min-height: 100vh; overflow-x: hidden; }
+    body::before { content: ''; position: fixed; inset: 0; background: radial-gradient(ellipse 80% 60% at 10% 20%, rgba(123,63,160,0.3) 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 90% 80%, rgba(232,98,138,0.2) 0%, transparent 55%); z-index: 0; pointer-events: none; }
+    header { position: sticky; top: 0; z-index: 100; padding: 0 2.5rem; height: 70px; display: flex; align-items: center; justify-content: space-between; background: rgba(26,10,46,0.85); backdrop-filter: blur(18px); border-bottom: 1px solid var(--border); }
+    
+    /* El logo "Kventure" con efecto de texto en degradado de colores */
+    .logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; background: linear-gradient(90deg, var(--gold), var(--rose-lt)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .back-btn { display: flex; align-items: center; gap: 0.5rem; padding: 0.45rem 1.2rem; border: 1px solid var(--border); border-radius: 50px; text-decoration: none; color: rgba(253,248,255,0.7); font-size: 0.88rem; transition: all 0.25s; }
+    .back-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .contenido { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 3rem 2.5rem 5rem; }
+    h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem; background: linear-gradient(135deg, var(--gold-lt), var(--rose-lt)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .subtitulo { color: rgba(253,248,255,0.4); margin-bottom: 2.5rem; }
+    /* Items del carrito */
+    .carrito-item { display: flex; gap: 1rem; align-items: center; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 1rem 1.2rem; margin-bottom: 1rem; transition: border-color 0.25s; }
+    .carrito-item:hover { border-color: var(--border); }
+    .carrito-item-img { width: 70px; height: 70px; border-radius: 10px; object-fit: cover; background: rgba(255,255,255,0.05); flex-shrink: 0; }
+    .carrito-item-info { flex: 1; }
+    .carrito-item-nombre { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.3rem; }
+    .carrito-item-precio { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--gold-lt); }
+    .carrito-item-controles { display: flex; align-items: center; gap: 0.5rem; }
+    .ctrl-btn { width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: var(--white); font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+    .ctrl-btn:hover { background: rgba(212,160,23,0.2); border-color: var(--gold); }
+    .ctrl-delete { background: rgba(232,98,138,0.1); border-color: rgba(232,98,138,0.3); }
+    .ctrl-delete:hover { background: rgba(232,98,138,0.25); }
+    .ctrl-cantidad { min-width: 24px; text-align: center; font-weight: 600; font-size: 0.95rem; }
+    /* Resumen */
+    .resumen { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 1.8rem; margin-top: 2rem; }
+    .resumen-fila { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.9rem; color: rgba(253,248,255,0.6); }
+    .resumen-fila:last-child { border-bottom: none; }
+    .resumen-total { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--gold-lt); padding-top: 1rem; }
+    .btn-comprar { width: 100%; margin-top: 1.5rem; background: linear-gradient(135deg, var(--gold), var(--rose)); color: var(--dark); border: none; border-radius: 12px; padding: 1rem; font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; letter-spacing: 0.5px; }
+    .btn-comprar:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(232,98,138,0.35); }
+    .btn-vaciar { width: 100%; margin-top: 0.8rem; background: transparent; color: rgba(253,248,255,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 0.8rem; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; }
+    .btn-vaciar:hover { border-color: var(--rose); color: var(--rose-lt); }
+    footer { position: relative; z-index: 1; text-align: center; padding: 2rem; border-top: 1px solid var(--border); color: rgba(253,248,255,0.25); font-size: 0.8rem; }
+    footer span { color: var(--rose); }
+    @media (max-width: 640px) { .contenido { padding: 2rem 1.2rem; } .carrito-item { flex-wrap: wrap; } header { padding: 0 1.2rem; } }
+  </style>
+</head>
+<body>
+    <!-- ============================================================
+       HEADER — Barra de navegación con logo y links
+  ============================================================ -->
+  <header>
+    <div class="logo">Kventure</div>
+    <a href="MenuPrincipal.html" class="back-btn">← Seguir comprando</a>
+  </header>
+
+  <div class="contenido">
+    <h1>Tu Carrito</h1>
+    <p class="subtitulo">Revisa tus productos antes de confirmar</p>
+
+    <!-- Los ítems se generan aquí por carrito.js -->
+    <div id="carrito-lista"></div>
+
+    <!-- Resumen de compra -->
+    <div class="resumen">
+      <div class="resumen-fila">
+        <span>Subtotal</span>
+        <span id="carrito-total">$0.00</span>
+      </div>
+      <div class="resumen-fila">
+        <span>Envío internacional</span>
+        <span>$15.00</span>
+      </div>
+      <div class="resumen-fila resumen-total">
+        <span>Total</span>
+        <span id="carrito-grand-total">$15.00</span>
+      </div>
+      <button class="btn-comprar" onclick="procesarCompra()">
+        Confirmar compra ✦
+      </button>
+      <button class="btn-vaciar" onclick="vaciarCarritoConConfirmacion()">
+        Vaciar carrito
+      </button>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 <span>Kventure</span> — Tu universo K-pop favorito ✦</p>
+  </footer>
+
+  <!-- Scripts: primero la DB, luego el carrito -->
+  <script src="js/database.js"></script>
+  <script src="js/carrito.js"></script>
+  <script>
+    // Actualizo el gran total (subtotal + envío)
+    function actualizarGrandTotal() {
+      const subtotal  = getTotal();
+      const envio     = subtotal > 0 ? 15 : 0;
+      const grandTotal = subtotal + envio;
+      const el = document.getElementById("carrito-grand-total");
+      if (el) el.textContent = `$${grandTotal.toFixed(2)}`;
+    }
+
+    // Intercepto renderizarCarrito para también actualizar el grand total
+    const _render = renderizarCarrito;
+    renderizarCarrito = function() {
+      _render();
+      actualizarGrandTotal();
+    };
+
+    function vaciarCarritoConConfirmacion() {
+      if (carrito.length === 0) return;
+      if (confirm("¿Estás seguro de que quieres vaciar el carrito?")) {
+        vaciarCarrito();
+        renderizarCarrito();
+      }
+    }
+
+    function procesarCompra() {
+      if (carrito.length === 0) {
+        alert("Tu carrito está vacío. ¡Agrega productos primero!");
+        return;
+      }
+      alert(`¡Gracias por tu compra! 🎉\nTotal: $${(getTotal() + 15).toFixed(2)}\n\nTu pedido está siendo procesado.`);
+      vaciarCarrito();
+      renderizarCarrito();
+    }
+
+    // Render inicial
+    renderizarCarrito();
+  </script>
+</body>
+</html>

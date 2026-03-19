@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stray Kids — Kventure</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --c1: #F4C430; --c1-lt: #FFE080;
+      --c2: #1A1A1A; --c2-lt: #666666;
+      --white: #FDF8FF; --dark: #0E0E08;
+      --card-bg: rgba(255,255,255,0.05);
+      --border: rgba(244,196,48,0.3);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(--white); min-height: 100vh; overflow-x: hidden; }
+    body::before { content: ''; position: fixed; inset: 0; background: radial-gradient(ellipse 80% 60% at 10% 20%, rgba(244,196,48,0.08) 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 90% 80%, rgba(100,80,0,0.12) 0%, transparent 55%); z-index: 0; pointer-events: none; }
+    header { position: sticky; top: 0; z-index: 100; padding: 0 2.5rem; height: 70px; display: flex; align-items: center; justify-content: space-between; background: rgba(14,14,8,0.85); backdrop-filter: blur(18px); border-bottom: 1px solid var(--border); }
+    .logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; background: linear-gradient(90deg, #D4A017, #E8628A); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; }
+    .breadcrumb a { color: rgba(253,248,255,0.5); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--white); }
+    .breadcrumb .sep { color: rgba(253,248,255,0.2); }
+    .breadcrumb .current { color: var(--c1-lt); }
+    .grupo-hero { position: relative; z-index: 1; display: flex; align-items: center; gap: 2.5rem; max-width: 1100px; margin: 0 auto; padding: 4rem 2.5rem 3rem; animation: fadeUp 0.7s ease both; }
+    .grupo-avatar { width: 160px; height: 160px; border-radius: 50%; flex-shrink: 0; border: 2px solid var(--border); background: linear-gradient(135deg, #0e0e08, #2a2400); display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+    .grupo-info h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem,5vw,3.5rem); font-weight: 900; background: linear-gradient(135deg, var(--c1-lt), var(--c1)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .grupo-info p { margin-top: 0.5rem; color: rgba(253,248,255,0.45); font-size: 0.9rem; }
+    .grupo-info .tags { display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap; }
+    .tag { padding: 0.25rem 0.8rem; border-radius: 50px; font-size: 0.75rem; font-weight: 500; }
+    .tag-1 { background: rgba(244,196,48,0.12); color: var(--c1-lt); border: 1px solid rgba(244,196,48,0.3); }
+    .tag-2 { background: rgba(50,50,50,0.3); color: var(--c2-lt); border: 1px solid rgba(100,100,100,0.3); }
+    .categorias { position: relative; z-index: 1; display: flex; gap: 1rem; flex-wrap: wrap; max-width: 1100px; margin: 0 auto; padding: 0 2.5rem 2rem; }
+    .cat-btn { padding: 0.5rem 1.4rem; border-radius: 50px; border: 1px solid rgba(255,255,255,0.12); background: transparent; color: rgba(253,248,255,0.6); font-family: 'DM Sans', sans-serif; font-size: 0.85rem; cursor: pointer; transition: all 0.25s; }
+    .cat-btn:hover, .cat-btn.active { background: rgba(244,196,48,0.12); border-color: var(--c1); color: var(--c1-lt); }
+    .seccion { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 2.5rem 3.5rem; }
+    .seccion-titulo { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+    .seccion-titulo h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; }
+    .seccion-titulo .linea { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(244,196,48,0.3), transparent); }
+    .seccion-titulo .emoji { font-size: 1.3rem; }
+    .productos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.2rem; }
+    .producto-card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s; cursor: pointer; animation: fadeUp 0.6s ease both; }
+    .producto-card:hover { transform: translateY(-5px); border-color: var(--c1); box-shadow: 0 12px 30px rgba(244,196,48,0.15); }
+    .prod-img { width: 100%; height: 160px; display: flex; align-items: center; justify-content: center; font-size: 3rem; position: relative; overflow: hidden; }
+    .prod-lightstick .prod-img { background: linear-gradient(135deg, #0e0e08, #2a2400); }
+    .prod-album      .prod-img { background: linear-gradient(135deg, #0e0e08, #201c00); }
+    .prod-peluche    .prod-img { background: linear-gradient(135deg, #0e0e08, #251f00); }
+    .prod-ropa       .prod-img { background: linear-gradient(135deg, #0e0e08, #1e1a00); }
+    .prod-badge { position: absolute; top: 0.7rem; right: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.65rem; font-weight: 600; letter-spacing: 0.5px; z-index: 2; }
+    .badge-new { background: var(--c1); color: #0e0e08; }
+    .badge-hot { background: #E8628A; color: white; }
+    .badge-ltd { background: #333; color: #aaa; border: 1px solid #555; }
+    .prod-body { padding: 1rem 1rem 1.2rem; }
+    .prod-nombre { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.25rem; line-height: 1.3; }
+    .prod-desc { font-size: 0.75rem; color: rgba(253,248,255,0.4); margin-bottom: 0.8rem; line-height: 1.4; }
+    .prod-footer { display: flex; align-items: center; justify-content: space-between; }
+    .prod-precio { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--c1-lt); }
+    .add-btn { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--c1), #c8a000); border: none; color: #0e0e08; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
+    .add-btn:hover { transform: scale(1.15); }
+    .producto-card:nth-child(1) { animation-delay: 0.05s; } .producto-card:nth-child(2) { animation-delay: 0.10s; } .producto-card:nth-child(3) { animation-delay: 0.15s; } .producto-card:nth-child(4) { animation-delay: 0.20s; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    .back-row { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 2.5rem 4rem; }
+    .back-link { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.4rem; border: 1px solid var(--border); border-radius: 50px; text-decoration: none; color: rgba(253,248,255,0.6); font-size: 0.85rem; transition: all 0.25s; }
+    .back-link:hover { border-color: var(--c1); color: var(--c1); }
+    footer { position: relative; z-index: 1; text-align: center; padding: 2rem; border-top: 1px solid var(--border); color: rgba(253,248,255,0.25); font-size: 0.8rem; }
+    footer span { color: #E8628A; }
+    @media (max-width: 640px) { .grupo-hero { flex-direction: column; text-align: center; padding: 2.5rem 1.2rem 2rem; } .grupo-info .tags { justify-content: center; } .seccion, .back-row { padding-left: 1.2rem; padding-right: 1.2rem; } .productos-grid { grid-template-columns: repeat(2, 1fr); } }
+  </style>
+</head>
+<body data-grupo="straykids">
+  <header>
+    <div class="logo">Kventure</div>
+    <div class="breadcrumb">
+      <a href="MenuPrincipal.html">← Inicio</a><span class="sep">/</span>
+      <a href="JYP.html">JYP</a><span class="sep">/</span>
+      <span class="current">Stray Kids</span>
+    </div>
+      <a href="carrito.html" style="position:relative;font-size:1.4rem;text-decoration:none;margin-left:1rem;cursor:pointer;">🛒<span class="carrito-contador" style="position:absolute;top:-8px;right:-10px;background:#E8628A;color:white;border-radius:50%;width:20px;height:20px;font-size:0.7rem;font-weight:700;display:none;align-items:center;justify-content:center;font-family:sans-serif;">0</span></a>
+</header>
+  <section class="grupo-hero">
+    <div class="grupo-avatar"> </div>
+    <div class="grupo-info">
+      <h1>Stray Kids</h1>
+      <p>JYP Entertainment · Debut 2018 · 8 miembros</p>
+      <div class="tags">
+        <span class="tag tag-1">K-pop</span>
+        <span class="tag tag-2">Boy Group</span>
+        <span class="tag tag-1">4th Generation</span>
+      </div>
+    </div>
+  </section>
+  <div class="categorias">
+    <button class="cat-btn active">Álbumes</button>
+    <button class="cat-btn">Peluches</button>
+    <button class="cat-btn">Lightsticks</button>
+    <button class="cat-btn">Ropa</button>
+  </div>
+  <section class="seccion">
+    <div class="seccion-titulo"><h2>Discografía</h2><div class="linea"></div></div>
+    <div class="productos-grid">
+      <div class="producto-card prod-album"><div class="prod-img"><span class="prod-badge badge-new">NEW</span></div><div class="prod-body"><div class="prod-nombre">ATE (2024)</div><div class="prod-desc">8vo álbum completo — Chk Chk Boom, Stray Kids</div><div class="prod-footer"><span class="prod-precio">$30.00</span><button class="add-btn">+</button></div></div></div>
+      <div class="producto-card prod-album"><div class="prod-img"></div><div class="prod-body"><div class="prod-nombre">★★★★★ (5-STAR) (2023)</div><div class="prod-desc">7mo álbum completo — S-Class, Miroh</div><div class="prod-footer"><span class="prod-precio">$28.00</span><button class="add-btn">+</button></div></div></div>
+      <div class="producto-card prod-album"><div class="prod-img"></div><div class="prod-body"><div class="prod-nombre">MAXIDENT (2022)</div><div class="prod-desc">6to mini álbum — CASE 143, Super Board</div><div class="prod-footer"><span class="prod-precio">$25.00</span><button class="add-btn">+</button></div></div></div>
+      <div class="producto-card prod-album"><div class="prod-img"></div><div class="prod-body"><div class="prod-nombre">Clé 1: MIROH (2019)</div><div class="prod-desc">3er mini álbum — Miroh, Side Effects</div><div class="prod-footer"><span class="prod-precio">$22.00</span><button class="add-btn">+</button></div></div></div>
+    </div>
+  </section>
+  <section class="seccion">
+    <div class="seccion-titulo"><h2>Lightsticks</h2><div class="linea"></div></div>
+    <div class="productos-grid">
+      <div class="producto-card prod-lightstick"><div class="prod-img"><span class="prod-badge badge-new">NEW</span></div><div class="prod-body"><div class="prod-nombre">SKZ Official Lightstick Ver.2</div><div class="prod-desc">Diseño amarillo dorado, edición STAY</div><div class="prod-footer"><span class="prod-precio">$50.00</span><button class="add-btn">+</button></div></div></div>
+      <div class="producto-card prod-lightstick"><div class="prod-img"><span class="prod-badge badge-ltd">LIMITED</span></div><div class="prod-body"><div class="prod-nombre">SKZ Lightstick MANIAC Tour</div><div class="prod-desc">Edición especial tour MANIAC</div><div class="prod-footer"><span class="prod-precio">$58.00</span><button class="add-btn">+</button></div></div></div>
+    </div>
+  </section>
+  <section class="seccion">
+    <div class="seccion-titulo"><h2>Peluches</h2><div class="linea"></div></div>
+    <div class="productos-grid">
+      <div class="producto-card prod-peluche"><div class="prod-img"><span class="prod-badge badge-new">NEW</span></div><div class="prod-body"><div class="prod-nombre">Muñeco Bang Chan</div><div class="prod-desc">Peluche oficial 25cm, outfit 5-STAR</div><div class="prod-footer"><span class="prod-precio">$35.00</span><button class="add-btn">+</button></div></div></div>
+      <div class="producto-card prod-peluche"><div class="prod-img"></div><div class="prod-body"><div class="prod-nombre">Muñeco Felix</div><div class="prod-desc">Peluche oficial 25cm, outfit 5-STAR</div><div class="prod-footer"><span class="prod-precio">$35.00</span><button class="add-btn">+</button></div></div></div>
+      <div class="producto-card prod-peluche"><div class="prod-img"></div><div class="prod-body"><div class="prod-nombre">Muñeco Han</div><div class="prod-desc">Peluche oficial 25cm, outfit 5-STAR</div><div class="prod-footer"><span class="prod-precio">$35.00</span><button class="add-btn">+</button></div></div></div>
+      <div class="producto-card prod-peluche"><div class="prod-img"><span class="prod-badge badge-hot">HOT</span></div><div class="prod-body"><div class="prod-nombre">Muñeco Lee Know</div><div class="prod-desc">Peluche oficial 25cm, outfit 5-STAR</div><div class="prod-footer"><span class="prod-precio">$35.00</span><button class="add-btn">+</button></div></div></div>
+    </div>
+  </section>
+  <section class="seccion">
+    <div class="seccion-titulo"><h2>Ropa Oficial</h2><div class="linea"></div></div>
+    <div class="productos-grid">
+      <div class="producto-card prod-ropa"><div class="prod-img"><span class="prod-badge badge-new">NEW</span></div><div class="prod-body"><div class="prod-nombre">Hoodie 5-STAR</div><div class="prod-desc">Sudadera negra con estrellas doradas, tallas S–XL</div><div class="prod-footer"><span class="prod-precio">$65.00</span><button class="add-btn">+</button></div></div></div>
+      <div class="producto-card prod-ropa"><div class="prod-img"></div><div class="prod-body"><div class="prod-nombre">Camiseta SKZ Logo</div><div class="prod-desc">Camiseta negra con logo amarillo, unisex</div><div class="prod-footer"><span class="prod-precio">$38.00</span><button class="add-btn">+</button></div></div></div>
+      <div class="producto-card prod-ropa"><div class="prod-img"></div><div class="prod-body"><div class="prod-nombre">Cap STAY Oficial</div><div class="prod-desc">Gorra negra ajustable con bordado SKZ</div><div class="prod-footer"><span class="prod-precio">$30.00</span><button class="add-btn">+</button></div></div></div>
+      <div class="producto-card prod-ropa"><div class="prod-img"></div><div class="prod-body"><div class="prod-nombre">Tote Bag STAY</div><div class="prod-desc">Bolsa de tela oficial edición especial</div><div class="prod-footer"><span class="prod-precio">$25.00</span><button class="add-btn">+</button></div></div></div>
+    </div>
+  </section>
+  <div class="back-row"><a href="JYP.html" class="back-link">← Volver a JYP Entertainment</a></div>
+  <footer><p>© 2025 <span>Kventure</span> — Tu universo K-pop favorito ✦</p></footer>
+
+  <script src="js/database.js"></script>
+  <script src="js/carrito.js"></script>
+  <script src="js/grupo.js"></script>
+</body>
+</html>

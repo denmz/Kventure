@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8" />
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
+
+  <title>Kventure – K-pop Universe</title>
+  
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+
+  <style>
+
+    
+    :root {
+      --gold:       #D4A017;  
+      --gold-lt:    #F0C940;  
+      --rose:       #E8628A;  
+      --rose-lt:    #F9A8C9;  
+      --purple:     #7B3FA0;  
+      --purple-lt:  #B47FD4;  
+      --white:      #FDF8FF;  
+      --dark:       #1A0A2E;  
+      --card-bg:    rgba(255,255,255,0.06); 
+      --border:     rgba(212,160,23,0.25);  
+      
+    }
+
+    
+    *, *::before, *::after {
+      box-sizing: border-box; 
+      margin: 0;              
+      padding: 0;             
+    }
+    
+
+    html { scroll-behavior: smooth; }
+    
+
+    
+    body {
+      font-family: 'DM Sans', sans-serif; 
+      background: var(--dark);            
+      color: var(--white);                
+      min-height: 100vh;    
+      overflow-x: hidden;   
+    }
+
+    
+    body::before {
+      content: '';      
+      position: fixed;  
+      inset: 0;         
+      background:
+        
+        radial-gradient(ellipse 80% 60% at 10% 20%, rgba(123,63,160,0.35) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 90% 80%, rgba(232,98,138,0.25) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(212,160,23,0.10) 0%, transparent 60%);
+      z-index: 0;           
+      pointer-events: none; 
+    }
+
+    
+    .orb {
+      position: fixed;      
+      border-radius: 50%;   
+      filter: blur(80px);   
+      opacity: 0.18;        
+      z-index: 0;           
+      animation: drift 12s ease-in-out infinite alternate;
+      
+      pointer-events: none; 
+    }
+
+    
+    .orb1 {
+      width: 400px; height: 400px;
+      background: var(--purple);
+      top: -100px; left: -100px;  
+      animation-duration: 14s;    
+    }
+    .orb2 {
+      width: 300px; height: 300px;
+      background: var(--rose);
+      bottom: -80px; right: -60px; 
+      animation-duration: 10s;
+    }
+    .orb3 {
+      width: 250px; height: 250px;
+      background: var(--gold);
+      top: 50%; left: 60%;        
+      animation-duration: 16s;
+    }
+
+    
+    @keyframes drift {
+      from { transform: translate(0,0) scale(1); }
+      
+      to   { transform: translate(30px, 20px) scale(1.08); }
+      
+      
+    }
+
+    
+    header {
+      position: sticky; 
+      top: 0;           
+      z-index: 100;     
+      padding: 0 2.5rem;
+      height: 70px;
+
+      display: flex;                    
+      align-items: center;              
+      justify-content: space-between;  
+
+      background: rgba(26,10,46,0.75); 
+      backdrop-filter: blur(18px);     
+      border-bottom: 1px solid var(--border); 
+    }
+
+    
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+      font-weight: 900;
+      letter-spacing: 2px; 
+
+      background: linear-gradient(90deg, var(--gold), var(--rose-lt), var(--purple-lt));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    
+    nav {
+      display: flex;        
+      gap: 2rem;            
+      align-items: center;  
+    }
+
+    
+    nav a {
+      text-decoration: none;             
+      color: rgba(253,248,255,0.7);      
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      transition: color 0.2s;            
+      position: relative;                
+    }
+
+    
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--rose));
+      transition: width 0.3s;
+    }
+    nav a:hover { color: var(--white); }
+    nav a:hover::after { width: 100%; }
+
+    
+    .nav-cta {
+      background: linear-gradient(135deg, var(--gold), var(--rose));
+      color: var(--dark) !important;
+      padding: 0.45rem 1.2rem;
+      border-radius: 50px;
+      font-weight: 600 !important;
+      transition: transform 0.2s, box-shadow 0.2s !important;
+    }
+    .nav-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(232,98,138,0.4);
+    }
+    .nav-cta::after { display: none !important; }
+
+    
+    .hero {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 7rem 2rem 5rem;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 0.35rem 1.2rem;
+      border: 1px solid var(--gold);
+      border-radius: 50px;
+      font-size: 0.78rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      animation: fadeUp 0.9s ease 0.1s both;
+    }
+
+    .hero h1 .grad {
+      background: linear-gradient(135deg, var(--gold-lt) 0%, var(--rose) 45%, var(--purple-lt) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      margin-top: 1.5rem;
+      font-size: 1.15rem;
+      color: rgba(253,248,255,0.6);
+      max-width: 480px;
+      margin-inline: auto;
+      line-height: 1.7;
+      animation: fadeUp 1s ease 0.2s both;
+    }
+
+    .hero-divider {
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--rose), var(--purple));
+      margin: 2.5rem auto 0;
+      border-radius: 10px;
+      animation: fadeUp 1s ease 0.3s both;
+    }
+
+    
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    
+    .section-label {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 3rem 2rem 1.5rem;
+    }
+    .section-label h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: rgba(253,248,255,0.4);
+    }
+    .section-label h2 span { color: var(--gold); }
+
+    
+    .empresas-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.8rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 2.5rem 6rem;
+    }
+
+    
+    .empresa-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      text-decoration: none;
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s, background 0.3s;
+      backdrop-filter: blur(12px);
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .empresa-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.4s;
+      border-radius: 20px;
+    }
+
+    .empresa-card.yg::before      { background: linear-gradient(135deg, rgba(212,160,23,0.15),  rgba(232,98,138,0.08)); }
+    .empresa-card.sm::before      { background: linear-gradient(135deg, rgba(180,127,212,0.18), rgba(123,63,160,0.08)); }
+    .empresa-card.hybe::before    { background: linear-gradient(135deg, rgba(232,98,138,0.18),  rgba(212,160,23,0.08)); }
+    .empresa-card.pnation::before { background: linear-gradient(135deg, rgba(123,63,160,0.18),  rgba(232,98,138,0.08)); }
+    .empresa-card.jyp::before     { background: linear-gradient(135deg, rgba(240,201,64,0.15),  rgba(180,127,212,0.08)); }
+
+    .empresa-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--gold);
+      box-shadow: 0 20px 50px rgba(212,160,23,0.2);
+    }
+    .empresa-card:hover::before { opacity: 1; }
+
+    .empresa-icon {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+    .empresa-card.yg      .empresa-icon { background: linear-gradient(135deg, var(--gold),       #a07010); }
+    .empresa-card.sm      .empresa-icon { background: linear-gradient(135deg, var(--purple),     #4a1f6a); }
+    .empresa-card.hybe    .empresa-icon { background: linear-gradient(135deg, var(--rose),       #b03060); }
+    .empresa-card.pnation .empresa-icon { background: linear-gradient(135deg, var(--purple-lt),  var(--rose)); }
+    .empresa-card.jyp     .empresa-icon { background: linear-gradient(135deg, var(--gold-lt),    var(--gold)); }
+
+    .empresa-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      position: relative;
+      z-index: 1;
+    }
+
+    .empresa-sub {
+      font-size: 0.8rem;
+      color: rgba(253,248,255,0.45);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+    }
+
+    .empresa-count {
+      display: inline-block;
+      padding: 0.3rem 1rem;
+      border-radius: 50px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      position: relative;
+      z-index: 1;
+    }
+    .empresa-card.yg      .empresa-count { background: rgba(212,160,23,0.2);  color: var(--gold-lt); }
+    .empresa-card.sm      .empresa-count { background: rgba(180,127,212,0.2); color: var(--purple-lt); }
+    .empresa-card.hybe    .empresa-count { background: rgba(232,98,138,0.2);  color: var(--rose-lt); }
+    .empresa-card.pnation .empresa-count { background: rgba(180,127,212,0.2); color: var(--rose-lt); }
+    .empresa-card.jyp     .empresa-count { background: rgba(240,201,64,0.2);  color: var(--gold-lt); }
+
+    .empresa-arrow {
+      position: absolute;
+      bottom: 1.4rem;
+      right: 1.6rem;
+      font-size: 1.1rem;
+      opacity: 0;
+      transform: translateX(-6px);
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 1;
+      color: var(--gold);
+    }
+    .empresa-card:hover .empresa-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .empresa-card:nth-child(1) { animation-delay: 0.1s; }
+    .empresa-card:nth-child(2) { animation-delay: 0.2s; }
+    .empresa-card:nth-child(3) { animation-delay: 0.3s; }
+    .empresa-card:nth-child(4) { animation-delay: 0.4s; }
+    .empresa-card:nth-child(5) { animation-delay: 0.5s; }
+
+    
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      color: rgba(253,248,255,0.3);
+      font-size: 0.82rem;
+      letter-spacing: 0.5px;
+    }
+    footer span { color: var(--rose); }
+
+    
+    @media (max-width: 640px) {
+      header { padding: 0 1.2rem; }
+      nav { gap: 1rem; }
+      .empresas-grid { padding: 1rem 1.2rem 4rem; gap: 1.2rem; }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+
+  
+  <header>
+    <div class="logo">Kventure</div>
+
+    <nav>
+      <a href="Inicio.html">Inicio</a>
+      
+
+      <a href="#">Productos</a>
+      
+
+      <a href="Login.html" class="nav-cta">✦ Login</a>
+      
+    </nav>
+      <a href="carrito.html" style="position:relative;font-size:1.4rem;text-decoration:none;margin-left:1rem;cursor:pointer;">🛒<span class="carrito-contador" style="position:absolute;top:-8px;right:-10px;background:#E8628A;color:white;border-radius:50%;width:20px;height:20px;font-size:0.7rem;font-weight:700;display:none;align-items:center;justify-content:center;font-family:sans-serif;">0</span></a>
+</header>
+
+  
+  <section class="hero">
+
+    <div class="hero-badge">✦ K-pop Universe Store ✦</div>
+
+    <h1>Search your<br>
+      <span class="grad">favorite Entertainment</span>
+    </h1>
+
+    <p>Explora las mejores empresas del K-pop y encuentra el merchandise oficial de tus grupos favoritos.</p>
+
+    <div class="hero-divider"></div>
+
+  </section>
+
+  
+  <div class="section-label">
+    <h2>Explora por <span>empresa</span></h2>
+  </div>
+
+  
+  <div class="empresas-grid">
+
+    <a href="YG.html" class="empresa-card yg">
+      <div class="empresa-imagen"></div>
+      <div class="empresa-name">YG Entertainment</div>
+      <div class="empresa-sub">Fundada 1996 · Seúl</div>
+      <div class="empresa-count">5 grupos disponibles</div>
+      <span class="empresa-arrow">→</span>
+    </a>
+
+    <a href="SM.html" class="empresa-card sm">
+      <div class="empresa-imagen"></div>
+      <div class="empresa-name">SM Entertainment</div>
+      <div class="empresa-sub">Fundada 1995 · Seúl</div>
+      <div class="empresa-count">6 grupos disponibles</div>
+      <span class="empresa-arrow">→</span>
+    </a>
+
+    <a href="Hybe.html" class="empresa-card hybe">
+      <div class="empresa-imagen"></div>
+      <div class="empresa-name">HYBE Music</div>
+      <div class="empresa-sub">Fundada 2005 · Seúl</div>
+      <div class="empresa-count">6 grupos disponibles</div>
+      <span class="empresa-arrow">→</span>
+    </a>
+
+    <a href="Pnation.html" class="empresa-card pnation">
+      <div class="empresa-imagen"></div>
+      <div class="empresa-name">P Nation</div>
+      <div class="empresa-sub">Fundada 2019 · Seúl</div>
+      <div class="empresa-count">4 grupos disponibles</div>
+      <span class="empresa-arrow">→</span>
+    </a>
+
+    <a href="JYP.html" class="empresa-card jyp">
+      <div class="empresa-imagen"></div>
+      <div class="empresa-name">JYP Entertainment</div>
+      <div class="empresa-sub">Fundada 1997 · Seúl</div>
+      <div class="empresa-count">5 grupos disponibles</div>
+      <span class="empresa-arrow">→</span>
+    </a>
+
+  </div>
+
+  
+  <footer>
+    <p>© 2025 <span>Kventure</span> — Tu universo K-pop favorito ✦</p>
+  </footer>
+
+
+  <script src="js/database.js"></script>
+  <script src="js/carrito.js"></script>
+  <script src="js/grupo.js"></script>
+</body>
+</html>

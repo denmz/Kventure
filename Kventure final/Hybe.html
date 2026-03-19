@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HYBE — Kventure</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --c1:      #5B9BD5;
+      --c1-lt:   #A8D4F5;
+      --c2:      #8899AA;
+      --white:   #FDF8FF;
+      --dark:    #080E18;
+      --card-bg: rgba(255,255,255,0.05);
+      --border:  rgba(91,155,213,0.25);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(--white); min-height: 100vh; overflow-x: hidden; }
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 10% 20%, rgba(91,155,213,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 90% 80%, rgba(136,153,170,0.1) 0%, transparent 55%);
+      z-index: 0; pointer-events: none;
+    }
+    header { position: sticky; top: 0; z-index: 100; padding: 0 2.5rem; height: 70px; display: flex; align-items: center; justify-content: space-between; background: rgba(8,14,24,0.85); backdrop-filter: blur(18px); border-bottom: 1px solid var(--border); }
+    .logo { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; background: linear-gradient(90deg, #D4A017, #E8628A); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .back-btn { display: flex; align-items: center; gap: 0.5rem; padding: 0.45rem 1.2rem; border: 1px solid var(--border); border-radius: 50px; text-decoration: none; color: rgba(253,248,255,0.7); font-size: 0.88rem; transition: all 0.25s; }
+    .back-btn:hover { border-color: var(--c1); color: var(--c1); }
+
+    .empresa-banner { position: relative; z-index: 1; text-align: center; padding: 5rem 2rem 4rem; }
+    .empresa-badge { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.4rem 1.4rem; border: 1px solid rgba(91,155,213,0.4); border-radius: 50px; font-size: 0.78rem; letter-spacing: 2px; text-transform: uppercase; color: var(--c1-lt); margin-bottom: 1.5rem; animation: fadeUp 0.6s ease both; }
+    .empresa-banner h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 900; animation: fadeUp 0.7s ease 0.1s both; background: linear-gradient(135deg, var(--c1-lt), #BBCCDD); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .empresa-banner p { margin-top: 1rem; color: rgba(253,248,255,0.5); font-size: 1rem; animation: fadeUp 0.8s ease 0.2s both; }
+    .empresa-line { width: 60px; height: 3px; background: linear-gradient(90deg, var(--c1), var(--c2)); margin: 1.8rem auto 0; border-radius: 10px; animation: fadeUp 0.8s ease 0.3s both; }
+
+    .section-title { position: relative; z-index: 1; text-align: center; padding: 2rem 2rem 0.5rem; font-size: 0.78rem; letter-spacing: 3px; text-transform: uppercase; color: rgba(253,248,255,0.35); }
+    .section-title span { color: var(--c1-lt); }
+
+    .grupos-grid { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.5rem; max-width: 1100px; margin: 2rem auto 5rem; padding: 0 2.5rem; }
+
+    .grupo-card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; overflow: hidden; text-decoration: none; color: var(--white); transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s; animation: fadeUp 0.7s ease both; backdrop-filter: blur(10px); }
+    .grupo-card:hover { transform: translateY(-6px); border-color: var(--c1); box-shadow: 0 16px 40px rgba(91,155,213,0.25); }
+
+    .grupo-img { width: 100%; height: 180px; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; position: relative; overflow: hidden; }
+    .grupo-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 40%, rgba(8,14,24,0.85)); }
+
+    .grupo-card.bts       .grupo-img { background: linear-gradient(135deg, #080e18, #1a0a30, #9b59b622); }
+    .grupo-card.txt       .grupo-img { background: linear-gradient(135deg, #080e18, #0e2040, #5b9bd533); }
+    .grupo-card.enhypen   .grupo-img { background: linear-gradient(135deg, #080e18, #2a0808, #c0392b33); }
+    .grupo-card.seventeen .grupo-img { background: linear-gradient(135deg, #080e18, #0a2a20, #2ecc9a33); }
+
+    .grupo-info { padding: 1.4rem 1.4rem 1.6rem; }
+    .grupo-nombre { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .grupo-sub { font-size: 0.78rem; color: rgba(253,248,255,0.4); letter-spacing: 0.5px; margin-bottom: 1rem; }
+    .grupo-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .tag { padding: 0.2rem 0.7rem; border-radius: 50px; font-size: 0.72rem; font-weight: 500; }
+    .tag-blue   { background: rgba(91,155,213,0.15);  color: #A8D4F5; border: 1px solid rgba(91,155,213,0.3); }
+    .tag-grey   { background: rgba(136,153,170,0.15); color: #BBCCDD; border: 1px solid rgba(136,153,170,0.3); }
+    .tag-red    { background: rgba(192,57,43,0.15);   color: #E87060; border: 1px solid rgba(192,57,43,0.3); }
+    .tag-teal   { background: rgba(46,204,154,0.12);  color: #7EEEDD; border: 1px solid rgba(46,204,154,0.3); }
+    .tag-purple { background: rgba(155,89,182,0.15);  color: #D7A8F0; border: 1px solid rgba(155,89,182,0.3); }
+
+    .ver-productos { display: flex; align-items: center; justify-content: space-between; margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.07); font-size: 0.82rem; color: var(--c1-lt); font-weight: 500; }
+
+    .grupo-card:nth-child(1) { animation-delay: 0.10s; }
+    .grupo-card:nth-child(2) { animation-delay: 0.18s; }
+    .grupo-card:nth-child(3) { animation-delay: 0.26s; }
+    .grupo-card:nth-child(4) { animation-delay: 0.34s; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    footer { position: relative; z-index: 1; text-align: center; padding: 2rem; border-top: 1px solid var(--border); color: rgba(253,248,255,0.25); font-size: 0.8rem; }
+    footer span { color: #E8628A; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">Kventure</div>
+    <a href="MenuPrincipal.html" class="back-btn">← Volver al inicio</a>
+      <a href="carrito.html" style="position:relative;font-size:1.4rem;text-decoration:none;margin-left:1rem;cursor:pointer;">🛒<span class="carrito-contador" style="position:absolute;top:-8px;right:-10px;background:#E8628A;color:white;border-radius:50%;width:20px;height:20px;font-size:0.7rem;font-weight:700;display:none;align-items:center;justify-content:center;font-family:sans-serif;">0</span></a>
+</header>
+
+  <section class="empresa-banner">
+    <div class="empresa-badge">K-pop Label</div>
+    <h1>HYBE</h1>
+    <p>Fundada en 2005 · Seúl, Corea del Sur</p>
+    <div class="empresa-line"></div>
+  </section>
+
+  <div class="section-title">Selecciona un <span>grupo</span></div>
+
+  <div class="grupos-grid">
+
+    <a href="BTS.html" class="grupo-card bts">
+      <div class="grupo-img"></div>
+      <div class="grupo-info">
+        <div class="grupo-nombre">BTS</div>
+        <div class="grupo-sub">Debut 2013 · 7 miembros</div>
+        <div class="grupo-tags">
+          <span class="tag tag-purple">Boy Group</span>
+          <span class="tag tag-grey">3rd Generation</span>
+        </div>
+        <div class="ver-productos">Ver productos →</div>
+      </div>
+    </a>
+
+    <a href="TXT.html" class="grupo-card txt">
+      <div class="grupo-img"></div>
+      <div class="grupo-info">
+        <div class="grupo-nombre">TXT</div>
+        <div class="grupo-sub">Debut 2019 · 5 miembros</div>
+        <div class="grupo-tags">
+          <span class="tag tag-blue">Boy Group</span>
+          <span class="tag tag-grey">4th Generation</span>
+        </div>
+        <div class="ver-productos">Ver productos →</div>
+      </div>
+    </a>
+
+    <a href="ENHYPHEN.html" class="grupo-card enhypen">
+      <div class="grupo-img"></div>
+      <div class="grupo-info">
+        <div class="grupo-nombre">ENHYPEN</div>
+        <div class="grupo-sub">Debut 2020 · 7 miembros</div>
+        <div class="grupo-tags">
+          <span class="tag tag-red">Boy Group</span>
+          <span class="tag tag-grey">4th Generation</span>
+        </div>
+        <div class="ver-productos">Ver productos →</div>
+      </div>
+    </a>
+
+    <a href="SEVENTEEN.html" class="grupo-card seventeen">
+      <div class="grupo-img"></div>
+      <div class="grupo-info">
+        <div class="grupo-nombre">Seventeen</div>
+        <div class="grupo-sub">Debut 2015 · 13 miembros</div>
+        <div class="grupo-tags">
+          <span class="tag tag-teal">Boy Group</span>
+          <span class="tag tag-grey">3rd Generation</span>
+        </div>
+        <div class="ver-productos">Ver productos →</div>
+      </div>
+    </a>
+
+  </div>
+
+  <footer>
+    <p>© 2025 <span>Kventure</span> · Tu universo K-pop favorito ✦</p>
+  </footer>
+
+
+  <script src="js/database.js"></script>
+  <script src="js/carrito.js"></script>
+  <script src="js/grupo.js"></script>
+</body>
+</html>
